@@ -14,11 +14,11 @@ provider:
   environment:
     AUCTIONS_TABLE_NAME: ${self:custom.AuctionsTable.name}
   iamRoleStatements:
-    - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}  
+    - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
 
-resources: 
+resources:
   Resources:
-    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}                          
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
 functions:
   createAuction:
     handler: src/handlers/createAuction.handler
@@ -33,7 +33,12 @@ functions:
       - http:
           method: GET
           path: /auction/{id}
-          
+
+  # processAuctions:
+  #   handler: src/handlers/processAuctions.handler
+  #   events:
+  #     - schedule: rate(1 minute)
+
   getAuctions:
     handler: src/handlers/getAuctions.handler
     events:
@@ -50,7 +55,7 @@ functions:
 
 custom:
   AuctionsTable:
-    name: !Ref AuctionsTable 
+    name: !Ref AuctionsTable
     arn: !GetAtt AuctionsTable.Arn
   bundle:
     linting: false
